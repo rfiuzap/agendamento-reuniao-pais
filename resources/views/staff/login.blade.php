@@ -5,7 +5,7 @@
 
 @section('content')
     <div class="hero">
-        <img src="{{ asset('img/logo.svg') }}" alt="Logo {{ $schoolName }}">
+        <img src="{{ $logoUrl }}" alt="Logo {{ $schoolName }}">
         <h1>Acesso da equipe escolar</h1>
         <p class="muted">Administração, coordenação e professoras.</p>
     </div>

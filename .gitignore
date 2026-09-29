@@ -20,3 +20,4 @@ yarn-error.log
 
 /deploy/composer.phar
 /deploy/.php-bin
+/public/uploads/

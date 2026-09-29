@@ -12,6 +12,7 @@ class Setting extends Model
         'contact_email' => '',
         'contact_phone' => '',
         'parent_instructions' => 'Escolha a reunião, a turma do seu filho e um horário disponível.',
+        'logo' => '',
     ];
 
     public $timestamps = false;
@@ -34,6 +35,16 @@ class Setting extends Model
     public static function get(string $key): ?string
     {
         return self::allValues()[$key] ?? null;
+    }
+
+    /** Uploaded logo (public/uploads) or the default one; also used as favicon. */
+    public static function logoUrl(): string
+    {
+        $logo = self::get('logo');
+
+        return $logo && is_file(public_path('uploads/'.$logo))
+            ? asset('uploads/'.$logo)
+            : asset('img/logo.svg');
     }
 
     public static function put(array $values): void

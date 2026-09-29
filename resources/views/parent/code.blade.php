@@ -5,7 +5,7 @@
 
 @section('content')
     <div class="hero">
-        <img src="{{ asset('img/logo.svg') }}" alt="">
+        <img src="{{ $logoUrl }}" alt="">
         <h1>Digite o código</h1>
         <p class="muted">Enviamos um código de 6 dígitos para<br><strong>{{ $email }}</strong></p>
     </div>

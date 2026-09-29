@@ -25,6 +25,7 @@ class AppServiceProvider extends ServiceProvider
                 'schoolName' => $settings['school_name'],
                 'contactEmail' => $settings['contact_email'],
                 'contactPhone' => $settings['contact_phone'],
+                'logoUrl' => Setting::logoUrl(),
             ]);
         });
     }

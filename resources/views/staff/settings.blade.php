@@ -5,7 +5,7 @@
 @section('content')
     <div class="page-header"><h1>Configurações</h1></div>
 
-    <form method="POST" action="{{ route('staff.settings.update') }}">
+    <form method="POST" action="{{ route('staff.settings.update') }}" enctype="multipart/form-data">
         @csrf @method('PUT')
         <div class="card">
             <h2>Escola</h2>
@@ -27,7 +27,21 @@
                 <label for="parent_instructions">Instruções exibidas aos responsáveis</label>
                 <textarea id="parent_instructions" name="parent_instructions" maxlength="1000">{{ old('parent_instructions', $settings['parent_instructions']) }}</textarea>
             </div>
-            <p class="hint">Para trocar o logo, substitua o arquivo <code>public/img/logo.svg</code>.</p>
+            <div class="field">
+                <label for="logo">Logo</label>
+                <div class="logo-field">
+                    <img src="{{ $logoUrl }}" alt="Logo atual" class="logo-preview" id="logo-preview">
+                    <div>
+                        <input type="file" id="logo" name="logo" accept="image/png,image/jpeg,image/webp"
+                               class="@error('logo') is-invalid @enderror">
+                        <div class="hint">PNG, JPG ou WEBP, até 1 MB. Prefira imagem quadrada: ela também é usada como ícone da aba do navegador.</div>
+                        @if($settings['logo'])
+                            <label class="check mt-1"><input type="checkbox" name="remove_logo" value="1"> Voltar ao logo padrão</label>
+                        @endif
+                    </div>
+                </div>
+                @error('logo')<div class="field-error">{{ $message }}</div>@enderror
+            </div>
             <button type="submit" class="btn">Salvar</button>
         </div>
     </form>

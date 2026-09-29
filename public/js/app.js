@@ -78,6 +78,34 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // "Salvar no celular": installs the site on the home screen
+    const installBtn = document.querySelector('[data-install-app]');
+    const installHelp = document.querySelector('[data-install-help]');
+    const standalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone;
+    const swUrl = document.querySelector('script[data-sw]')?.dataset.sw;
+    if (swUrl && 'serviceWorker' in navigator) navigator.serviceWorker.register(swUrl).catch(() => {});
+    if (installBtn && !standalone) {
+        let deferred = null;
+        const isIos = /iphone|ipad|ipod/i.test(navigator.userAgent);
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferred = e;
+            installBtn.hidden = false;
+        });
+        if (isIos) installBtn.hidden = false;
+        installBtn.addEventListener('click', async () => {
+            if (deferred) {
+                deferred.prompt();
+                await deferred.userChoice;
+                deferred = null;
+                installBtn.hidden = true;
+            } else if (installHelp) {
+                installHelp.hidden = !installHelp.hidden;
+            }
+        });
+        window.addEventListener('appinstalled', () => { installBtn.hidden = true; });
+    }
+
     // Auto-submit filter selects
     document.querySelectorAll('form[data-autosubmit] select').forEach((sel) => {
         sel.addEventListener('change', () => sel.form.submit());

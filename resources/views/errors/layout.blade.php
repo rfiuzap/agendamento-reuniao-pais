@@ -8,7 +8,7 @@
 </head>
 <body>
 <main class="public-main narrow" style="text-align:center">
-    <img src="{{ asset('img/logo.svg') }}" alt="" width="64" height="64">
+    <img src="{{ $logoUrl }}" alt="" width="64" height="64">
     <h1 class="mt-2">@yield('heading')</h1>
     <p class="muted">@yield('message')</p>
     <a href="{{ url('/') }}" class="btn">Ir para o início</a>

@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="noindex">
     <title>@yield('title') · {{ $schoolName }}</title>
-    <link rel="icon" href="{{ asset('img/logo.svg') }}" type="image/svg+xml">
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v=4">
-    <script src="{{ asset('js/app.js') }}?v=2" defer></script>
+    <link rel="icon" href="{{ $logoUrl }}">
+    <link rel="manifest" href="{{ route('manifest') }}">
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v=5">
+    <script src="{{ asset('js/app.js') }}?v=3" defer></script>
 </head>
 <body>
 @php
@@ -18,7 +19,7 @@
 <div class="staff">
     <aside class="sidebar" aria-label="Menu principal">
         <a class="brand" href="{{ route($user->homeRoute()) }}">
-            <img src="{{ asset('img/logo.svg') }}" alt="" width="34" height="34">
+            <img src="{{ $logoUrl }}" alt="" width="34" height="34">
             <span>{{ $schoolName }}</span>
         </a>
 

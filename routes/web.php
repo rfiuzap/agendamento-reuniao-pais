@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ManifestController;
 use App\Http\Controllers\Parent\AuthController as ParentAuth;
 use App\Http\Controllers\Parent\BookingController;
 use App\Http\Controllers\Parent\PortalController;
@@ -15,6 +16,8 @@ use App\Http\Controllers\Staff\TeacherController;
 use App\Http\Controllers\Staff\UserController;
 use App\Http\Controllers\Teacher\DashboardController as TeacherDashboard;
 use Illuminate\Support\Facades\Route;
+
+Route::get('/manifest.webmanifest', ManifestController::class)->name('manifest');
 
 // Responsible (parent) access by e-mail code
 Route::get('/', [ParentAuth::class, 'showEmail'])->name('parent.login');

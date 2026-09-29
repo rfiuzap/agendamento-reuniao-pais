@@ -190,8 +190,14 @@ tbody tr:hover { background: #f8fafc; }
 .appointment-card .summary { margin-bottom: 1rem; }
 .calendar-buttons { display: flex; flex-direction: column; align-items: center; gap: .6rem; margin: .25rem 0 .5rem; }
 .calendar-buttons .btn { width: 100%; max-width: 340px; }
-.app-version { font-size: .75rem; color: #94a3b8; margin-top: .25rem; }
-.sidebar-version { padding: 1rem .7rem .25rem; color: #7c8db5; }
+.app-version { font-size: .75rem; color: #94a3b8; margin: 1rem auto 0; padding-top: .75rem; border-top: 1px solid var(--border); max-width: 320px; }
+.sidebar-version { margin: 1rem .5rem 0; padding: .75rem .2rem .25rem; color: #7c8db5; border-top-color: rgba(255, 255, 255, .15); }
+.install-app { display: inline-flex; align-items: center; gap: .4rem; margin-top: .75rem; padding: .45rem .9rem; border: 1px solid var(--border); border-radius: 999px; background: var(--surface); color: var(--text); font: inherit; font-size: .85rem; font-weight: 600; cursor: pointer; }
+.install-app[hidden], .install-help[hidden] { display: none; }
+.install-app:hover { border-color: #93c5fd; }
+.install-help { max-width: 320px; margin: .6rem auto 0; font-size: .82rem; }
+.logo-field { display: flex; gap: 1rem; align-items: flex-start; flex-wrap: wrap; }
+.logo-preview { width: 72px; height: 72px; object-fit: contain; border: 1px solid var(--border); border-radius: 12px; background: #fff; padding: 4px; }
 .staff-link { text-align: center; margin: 3rem 0 0; font-size: .8rem; }
 .staff-link a { color: #94a3b8; }
 .staff-link a:hover { color: var(--muted); }
