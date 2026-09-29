@@ -7,7 +7,6 @@ use App\Http\Controllers\Controller;
 use App\Models\SchoolClass;
 use App\Models\SchoolYear;
 use App\Models\User;
-use App\Services\AuditLogger;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -38,8 +37,7 @@ class ClassController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        $class = SchoolClass::create($this->validated($request));
-        AuditLogger::log('created', 'class', $class->id, $class->only('name', 'school_year_id', 'teacher_id', 'active'));
+        SchoolClass::create($this->validated($request));
 
         return redirect()->route('staff.classes.index')->with('success', 'Turma cadastrada.');
     }
@@ -52,7 +50,6 @@ class ClassController extends Controller
     public function update(Request $request, SchoolClass $class): RedirectResponse
     {
         $class->update($this->validated($request, $class));
-        AuditLogger::log('updated', 'class', $class->id, $class->only('name', 'school_year_id', 'teacher_id', 'active'));
 
         return redirect()->route('staff.classes.index')->with('success', 'Turma atualizada.');
     }
@@ -62,7 +59,6 @@ class ClassController extends Controller
         if ($class->meetings()->exists()) {
             throw new BusinessRuleException('Esta turma participa de reuniões. Desative-a em vez de excluir.');
         }
-        AuditLogger::log('deleted', 'class', $class->id, ['name' => $class->name]);
         $class->delete();
 
         return redirect()->route('staff.classes.index')->with('success', 'Turma excluída.');

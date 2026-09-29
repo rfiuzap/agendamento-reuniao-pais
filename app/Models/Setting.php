@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\AuditLogger;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 
@@ -47,11 +48,31 @@ class Setting extends Model
             : asset('img/logo.svg');
     }
 
-    public static function put(array $values): void
+    public const LABELS = [
+        'school_name' => 'Nome da escola',
+        'contact_email' => 'E-mail de contato',
+        'contact_phone' => 'Telefone de contato',
+        'parent_instructions' => 'Instruções aos responsáveis',
+        'logo' => 'Logo',
+    ];
+
+    public static function put(array $values, bool $audit = true): void
     {
+        $before = self::allValues();
+        $changes = [];
+
         foreach ($values as $key => $value) {
             self::updateOrCreate(['key' => $key], ['value' => $value]);
+
+            if ((string) ($before[$key] ?? '') !== (string) $value) {
+                $show = fn ($v) => $key === 'logo' ? ($v ? 'novo logo enviado' : 'logo padrão') : (string) $v;
+                $changes[] = ['campo' => self::LABELS[$key] ?? $key, 'antes' => $show($before[$key] ?? ''), 'depois' => $show($value)];
+            }
         }
         Cache::forget('settings');
+
+        if ($audit && $changes) {
+            AuditLogger::record('settings', 'updated', null, 'Configurações', $changes);
+        }
     }
 }

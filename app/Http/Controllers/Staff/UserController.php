@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Staff;
 use App\Exceptions\BusinessRuleException;
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Services\AuditLogger;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -31,8 +30,7 @@ class UserController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        $user = User::create($this->validated($request));
-        AuditLogger::log('created', 'user', $user->id, $user->only('username', 'role', 'active'));
+        User::create($this->validated($request));
 
         return redirect()->route('staff.users.index')->with('success', 'Usuário criado.');
     }
@@ -51,7 +49,6 @@ class UserController extends Controller
         }
 
         $user->update($data);
-        AuditLogger::log('updated', 'user', $user->id, $user->only('username', 'role', 'active') + ['password_changed' => isset($data['password'])]);
 
         return redirect()->route('staff.users.index')->with('success', 'Usuário atualizado.');
     }

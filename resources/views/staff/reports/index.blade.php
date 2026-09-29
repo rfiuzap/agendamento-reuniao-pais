@@ -5,21 +5,19 @@
 @section('content')
     <div class="page-header">
         <h1>Relatórios</h1>
-        <a href="{{ route('staff.reports.logs') }}" class="btn btn-light">Logs de alterações</a>
+        <a href="{{ route('staff.reports.logs') }}" class="btn btn-light">Histórico de alterações</a>
     </div>
 
-    <div class="card mb-2">
-        <form method="GET" class="filters" data-autosubmit>
-            <div class="field">
-                <label for="meeting_id">Reunião</label>
-                <select id="meeting_id" name="meeting_id">
-                    @foreach($meetings as $m)
-                        <option value="{{ $m->id }}" @selected($meeting?->id === $m->id)>{{ $m->date->format('d/m/Y') }} · {{ $m->name }}</option>
-                    @endforeach
-                </select>
-            </div>
-        </form>
-    </div>
+    <form method="GET" class="filters" data-autosubmit>
+        <div class="field">
+            <label for="meeting_id">Reunião</label>
+            <select id="meeting_id" name="meeting_id">
+                @foreach($meetings as $m)
+                    <option value="{{ $m->id }}" @selected($meeting?->id === $m->id)>{{ $m->date->format('d/m/Y') }} · {{ $m->name }}</option>
+                @endforeach
+            </select>
+        </div>
+    </form>
 
     @if(! $meeting)
         <div class="card empty">Nenhuma reunião cadastrada.</div>

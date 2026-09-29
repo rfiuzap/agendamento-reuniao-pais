@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\Auditable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Appointment extends Model
 {
+    use Auditable;
+
     public const STATUSES = [
         'confirmed' => 'Confirmado',
         'cancelled' => 'Cancelado',
@@ -41,6 +44,32 @@ class Appointment extends Model
     public function isActive(): bool
     {
         return $this->status === 'confirmed';
+    }
+
+    public function auditEntity(): string
+    {
+        return 'appointment';
+    }
+
+    public function auditTitle(): string
+    {
+        return $this->student_name.' ('.$this->responsible_email.')';
+    }
+
+    public function auditFields(): array
+    {
+        return ['responsible_name' => 'Responsável', 'student_name' => 'Aluno', 'time_slot_id' => 'Horário', 'status' => 'Status'];
+    }
+
+    protected function auditValue(string $field, mixed $value): string
+    {
+        if ($field === 'time_slot_id') {
+            $slot = $value ? TimeSlot::with('schoolClass', 'meeting')->find($value) : null;
+
+            return $slot ? $slot->meeting->date->format('d/m').' · '.$slot->schoolClass?->name.' · '.$slot->label() : '';
+        }
+
+        return $field === 'status' ? (self::STATUSES[$value] ?? (string) $value) : $this->defaultAuditValue($field, $value);
     }
 
     public function statusLabel(): string

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\Auditable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -9,7 +10,27 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    use Notifiable;
+    use Auditable, Notifiable;
+
+    public function auditEntity(): string
+    {
+        return 'user';
+    }
+
+    public function auditFields(): array
+    {
+        return ['name' => 'Nome', 'email' => 'E-mail', 'username' => 'Usuário', 'role' => 'Perfil', 'active' => 'Ativo', 'password' => 'Senha'];
+    }
+
+    public function auditHidden(): array
+    {
+        return ['password'];
+    }
+
+    protected function auditValue(string $field, mixed $value): string
+    {
+        return $field === 'role' ? (self::ROLES[$value] ?? (string) $value) : $this->defaultAuditValue($field, $value);
+    }
 
     public const ROLE_ADMIN = 'admin';
     public const ROLE_COORDINATOR = 'coordinator';

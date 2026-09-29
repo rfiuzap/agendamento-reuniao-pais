@@ -11,7 +11,6 @@ use App\Models\TimeSlot;
 use App\Models\User;
 use App\Queries\AppointmentQuery;
 use App\Services\AppointmentService;
-use App\Services\AuditLogger;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -80,9 +79,7 @@ class AppointmentController extends Controller
             'slot_id' => ['required', 'integer', Rule::exists('time_slots', 'id')->where('meeting_id', $appointment->meeting_id)],
         ]);
 
-        $before = $appointment->time_slot_id;
         $this->appointments->reschedule($appointment, (int) $data['slot_id'], sameClassOnly: false);
-        AuditLogger::log('rescheduled', 'appointment', $appointment->id, ['from_slot' => $before, 'to_slot' => (int) $data['slot_id']]);
 
         return redirect()->route('staff.appointments.index')->with('success', 'Agendamento alterado e responsável notificado por e-mail.');
     }
@@ -90,10 +87,6 @@ class AppointmentController extends Controller
     public function cancel(Appointment $appointment): RedirectResponse
     {
         $this->appointments->cancel($appointment);
-        AuditLogger::log('cancelled', 'appointment', $appointment->id, [
-            'student' => $appointment->student_name,
-            'responsible' => $appointment->responsible_email,
-        ]);
 
         return back()->with('success', 'Agendamento cancelado e horário liberado.');
     }

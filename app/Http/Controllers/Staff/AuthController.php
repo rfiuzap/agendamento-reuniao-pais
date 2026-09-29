@@ -32,7 +32,7 @@ class AuthController extends Controller
         }
 
         $request->session()->regenerate();
-        AuditLogger::log('login', 'user', Auth::id());
+        AuditLogger::record('user', 'login', Auth::id(), Auth::user()->name);
 
         /** @var User $user */
         $user = Auth::user();

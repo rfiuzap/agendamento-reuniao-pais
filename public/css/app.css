@@ -126,6 +126,12 @@ tbody tr:hover { background: #f8fafc; }
 .stat { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.1rem; box-shadow: var(--shadow); }
 .stat-label { color: var(--muted); font-size: .82rem; font-weight: 600; }
 .stat-value { font-size: 1.75rem; font-weight: 800; margin-top: .2rem; font-variant-numeric: tabular-nums; }
+.history-list { list-style: none; margin: 0; padding: 0; display: grid; gap: .75rem; }
+.history-item { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: .9rem 1.1rem; box-shadow: var(--shadow); }
+.history-head { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; margin-bottom: .2rem; }
+.history-changes { margin: .6rem 0 0; padding: .6rem 0 0; border-top: 1px dashed var(--border); list-style: none; display: grid; gap: .3rem; font-size: .92rem; }
+.history-field { color: var(--muted); font-weight: 600; margin-right: .25rem; }
+.history-changes del { color: var(--red); text-decoration-thickness: 1px; }
 .stat-pct { font-size: .95rem; font-weight: 600; color: var(--muted); margin-left: .25rem; }
 
 /* Filters */

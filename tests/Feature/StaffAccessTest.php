@@ -132,7 +132,7 @@ class StaffAccessTest extends TestCase
 
         $this->post(route('staff.appointments.cancel', $appointment));
         $this->assertSame('cancelled', $appointment->fresh()->status);
-        $this->assertSame(2, AuditLog::where('entity', 'appointment')->count());
+        $this->assertSame(['created', 'updated', 'updated'], AuditLog::where('entity', 'appointment')->orderBy('id')->pluck('action')->all());
     }
 
     public function test_output_is_escaped_against_xss(): void

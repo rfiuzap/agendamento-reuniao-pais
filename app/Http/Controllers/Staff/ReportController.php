@@ -49,14 +49,17 @@ class ReportController extends Controller
 
     public function logs(Request $request): View
     {
-        $logs = AuditLog::with('user')
+        $logs = AuditLog::query()
             ->when($request->query('entity'), fn ($q, $e) => $q->where('entity', $e))
+            ->when($request->query('actor'), fn ($q, $a) => $q->where('actor', $a))
+            ->when(! $request->boolean('logins'), fn ($q) => $q->where('action', '!=', 'login'))
             ->latest('id')
-            ->paginate(50)
+            ->paginate(30)
             ->withQueryString();
 
-        $entities = AuditLog::distinct()->orderBy('entity')->pluck('entity');
+        $entities = AuditLog::distinct()->pluck('entity')->filter(fn ($e) => isset(AuditLog::ENTITIES[$e]))->sort()->values();
+        $actors = AuditLog::whereNotNull('actor')->distinct()->orderBy('actor')->pluck('actor');
 
-        return view('staff.reports.logs', compact('logs', 'entities'));
+        return view('staff.reports.logs', compact('logs', 'entities', 'actors'));
     }
 }

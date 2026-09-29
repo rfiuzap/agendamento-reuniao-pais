@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Staff;
 use App\Exceptions\BusinessRuleException;
 use App\Http\Controllers\Controller;
 use App\Models\SchoolYear;
-use App\Services\AuditLogger;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -27,8 +26,7 @@ class SchoolYearController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        $year = SchoolYear::create($this->validated($request));
-        AuditLogger::log('created', 'school_year', $year->id, $year->only('name', 'active'));
+        SchoolYear::create($this->validated($request));
 
         return redirect()->route('staff.years.index')->with('success', 'Sala/Ano cadastrada.');
     }
@@ -41,7 +39,6 @@ class SchoolYearController extends Controller
     public function update(Request $request, SchoolYear $year): RedirectResponse
     {
         $year->update($this->validated($request, $year));
-        AuditLogger::log('updated', 'school_year', $year->id, $year->only('name', 'active'));
 
         return redirect()->route('staff.years.index')->with('success', 'Sala/Ano atualizada.');
     }
@@ -51,7 +48,6 @@ class SchoolYearController extends Controller
         if ($year->classes()->exists()) {
             throw new BusinessRuleException('Esta sala/ano possui turmas. Desative-a em vez de excluir.');
         }
-        AuditLogger::log('deleted', 'school_year', $year->id, ['name' => $year->name]);
         $year->delete();
 
         return redirect()->route('staff.years.index')->with('success', 'Sala/Ano excluída.');

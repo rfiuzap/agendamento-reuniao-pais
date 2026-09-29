@@ -19,19 +19,19 @@ class MeetingService
         $data['start_time'] = SlotGenerator::normalize($data['start_time']);
         $data['end_time'] = SlotGenerator::normalize($data['end_time']);
         $classIds = array_values(array_unique(array_map('intval', $classIds)));
-        $isNew = ! $meeting->exists;
 
-        return DB::transaction(function () use ($meeting, $data, $classIds, $isNew) {
+        return DB::transaction(function () use ($meeting, $data, $classIds) {
+            $names = fn (array $ids) => SchoolClass::whereIn('id', $ids)->orderBy('name')->pluck('name')->join(', ');
+            $before = $meeting->exists ? $names($meeting->classes()->pluck('classes.id')->all()) : '';
+            $after = $names($classIds);
+            if ($before !== $after) {
+                $meeting->auditExtra = [['campo' => 'Turmas participantes', 'antes' => $before, 'depois' => $after]];
+            }
+
             $meeting->fill($data)->save();
+            $meeting->flushAudit(); // only the class list changed: the model fired no event
             $meeting->classes()->sync($classIds);
             $this->syncSlots($meeting->fresh(), $classIds);
-
-            AuditLogger::log($isNew ? 'created' : 'updated', 'meeting', $meeting->id, [
-                'name' => $meeting->name,
-                'date' => $meeting->date->format('Y-m-d'),
-                'status' => $meeting->status,
-                'classes' => $classIds,
-            ]);
 
             return $meeting;
         });
@@ -43,10 +43,7 @@ class MeetingService
             throw new BusinessRuleException('Esta reunião possui agendamentos e não pode ser excluída. Altere o status para "Encerrada".');
         }
 
-        DB::transaction(function () use ($meeting) {
-            AuditLogger::log('deleted', 'meeting', $meeting->id, ['name' => $meeting->name]);
-            $meeting->delete();
-        });
+        DB::transaction(fn () => $meeting->delete());
     }
 
     private function syncSlots(Meeting $meeting, array $classIds): void

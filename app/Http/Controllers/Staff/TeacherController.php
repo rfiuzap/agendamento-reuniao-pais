@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Staff;
 use App\Http\Controllers\Controller;
 use App\Models\SchoolClass;
 use App\Models\User;
-use App\Services\AuditLogger;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -36,9 +35,10 @@ class TeacherController extends Controller
         $data = $this->validated($request);
 
         DB::transaction(function () use ($data) {
-            $teacher = User::create($data['user'] + ['role' => User::ROLE_TEACHER]);
+            $teacher = new User($data['user'] + ['role' => User::ROLE_TEACHER]);
+            $this->trackClasses($teacher, $data['class_ids']);
+            $teacher->save();
             $this->syncClasses($teacher, $data['class_ids']);
-            AuditLogger::log('created', 'teacher', $teacher->id, ['username' => $teacher->username, 'classes' => $data['class_ids']]);
         });
 
         return redirect()->route('staff.teachers.index')->with('success', 'Professora cadastrada.');
@@ -61,17 +61,24 @@ class TeacherController extends Controller
         $data = $this->validated($request, $teacher);
 
         DB::transaction(function () use ($teacher, $data) {
+            $this->trackClasses($teacher, $data['class_ids']);
             $teacher->update($data['user']);
+            $teacher->flushAudit(); // only the class list changed: the model fired no event
             $this->syncClasses($teacher, $data['class_ids']);
-            AuditLogger::log('updated', 'teacher', $teacher->id, [
-                'username' => $teacher->username,
-                'active' => $teacher->active,
-                'classes' => $data['class_ids'],
-                'password_changed' => isset($data['user']['password']),
-            ]);
         });
 
         return redirect()->route('staff.teachers.index')->with('success', 'Professora atualizada.');
+    }
+
+    /** Adds "Turmas vinculadas: antes → depois" to the teacher's audit entry. */
+    private function trackClasses(User $teacher, array $classIds): void
+    {
+        $before = $teacher->exists ? $teacher->classes()->pluck('name')->join(', ') : '';
+        $after = SchoolClass::whereIn('id', $classIds)->orderBy('name')->pluck('name')->join(', ');
+
+        if ($before !== $after) {
+            $teacher->auditExtra = [['campo' => 'Turmas vinculadas', 'antes' => $before, 'depois' => $after]];
+        }
     }
 
     private function syncClasses(User $teacher, array $classIds): void

@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Staff;
 
 use App\Http\Controllers\Controller;
 use App\Models\Setting;
-use App\Services\AuditLogger;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -56,8 +55,6 @@ class SettingController extends Controller
         if (array_key_exists('logo', $data) && $oldLogo && is_file(public_path('uploads/'.$oldLogo))) {
             @unlink(public_path('uploads/'.$oldLogo));
         }
-
-        AuditLogger::log('updated', 'settings', null, $data);
 
         return back()->with('success', 'Configurações salvas.');
     }
