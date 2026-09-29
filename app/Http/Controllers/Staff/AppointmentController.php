@@ -24,7 +24,7 @@ class AppointmentController extends Controller
         'class' => 'Por turma',
     ];
 
-    public const DEFAULT_GROUP = 'meeting';
+    public const DEFAULT_GROUP = 'class';
 
     public static function currentGroup(Request $request): string
     {
