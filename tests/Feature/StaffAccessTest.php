@@ -28,7 +28,7 @@ class StaffAccessTest extends TestCase
 
         $this->post(route('staff.login.store'), ['login' => 'chefe', 'password' => 'senha123'])
             ->assertRedirect(route('staff.dashboard'));
-        $this->post(route('staff.logout'));
+        $this->post(route('staff.logout'))->assertRedirect(route('parent.login'));
 
         $this->post(route('staff.login.store'), ['login' => 'inativa', 'password' => 'senha123'])
             ->assertSessionHasErrors('login');
