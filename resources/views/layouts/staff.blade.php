@@ -81,6 +81,7 @@
             <div class="muted small">@yield('title')</div>
             <div class="user">
                 <span><strong>{{ $user->name }}</strong> <span class="role muted">· {{ $user->roleLabel() }}</span></span>
+                <a href="{{ route('staff.password.edit') }}" class="small">Alterar senha</a>
                 <form method="POST" action="{{ route('staff.logout') }}" class="mb-0">
                     @csrf
                     <button type="submit" class="btn btn-light btn-sm">Sair</button>

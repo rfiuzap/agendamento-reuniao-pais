@@ -71,6 +71,8 @@ class UserController extends Controller
         $data['active'] = $request->boolean('active');
         if (empty($data['password'])) {
             unset($data['password']);
+        } elseif ($user?->id !== $request->user()->id) {
+            $data['must_change_password'] = true; // password set by the admin is temporary
         }
 
         return $data;

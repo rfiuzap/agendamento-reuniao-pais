@@ -111,6 +111,7 @@ class TeacherController extends Controller
         ];
         if (! empty($data['password'])) {
             $user['password'] = $data['password'];
+            $user['must_change_password'] = true; // password set by the admin is temporary
         }
 
         return ['user' => $user, 'class_ids' => array_map('intval', $data['class_ids'] ?? [])];

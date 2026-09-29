@@ -42,7 +42,7 @@ class User extends Authenticatable
         self::ROLE_TEACHER => 'Professora',
     ];
 
-    protected $fillable = ['name', 'email', 'username', 'password', 'role', 'active'];
+    protected $fillable = ['name', 'email', 'username', 'password', 'role', 'active', 'must_change_password'];
 
     protected $hidden = ['password', 'remember_token'];
 
@@ -51,6 +51,7 @@ class User extends Authenticatable
         return [
             'password' => 'hashed',
             'active' => 'boolean',
+            'must_change_password' => 'boolean',
         ];
     }
 

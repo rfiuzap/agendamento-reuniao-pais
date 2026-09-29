@@ -9,6 +9,7 @@ use App\Http\Controllers\Staff\AuthController as StaffAuth;
 use App\Http\Controllers\Staff\ClassController;
 use App\Http\Controllers\Staff\DashboardController;
 use App\Http\Controllers\Staff\MeetingController;
+use App\Http\Controllers\Staff\PasswordController;
 use App\Http\Controllers\Staff\ReportController;
 use App\Http\Controllers\Staff\SchoolYearController;
 use App\Http\Controllers\Staff\SettingController;
@@ -53,6 +54,11 @@ Route::prefix('admin')->name('staff.')->group(function () {
         Route::post('/login', [StaffAuth::class, 'login'])->middleware('throttle:10,1')->name('login.store');
     });
     Route::post('/logout', [StaffAuth::class, 'logout'])->middleware('auth')->name('logout');
+
+    Route::middleware('auth')->group(function () {
+        Route::get('/senha', [PasswordController::class, 'edit'])->name('password.edit');
+        Route::put('/senha', [PasswordController::class, 'update'])->name('password.update');
+    });
 
     Route::middleware(['auth', 'role:admin,coordinator'])->group(function () {
         Route::get('/agendamentos', [AppointmentController::class, 'index'])->name('appointments.index');
