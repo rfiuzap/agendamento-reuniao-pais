@@ -18,7 +18,10 @@
     </nav>
 
     <div class="card">
-        @include('staff._filters', ['extra' => $group ? ['group' => $group] : []])
+        @include('staff._filters', [
+            'extra' => $group ? ['group' => $group] : [],
+            'fields' => ['meeting_id', 'school_year_id', 'class_id', 'teacher_id', 'q'],
+        ])
 
         @if($grouped !== null)
             @forelse($grouped as $title => $rows)

@@ -57,18 +57,31 @@
         </div>
 
         <div class="card">
-            <h2>Procura por horário</h2>
+            <h2>Horários</h2>
             <div class="table-wrap">
                 <table>
-                    <thead><tr><th>Horário</th><th>Reservados</th><th>Disponíveis</th><th>Ocupação</th></tr></thead>
+                    <thead><tr><th>Horário</th><th>Turma</th><th>Responsável / Aluno</th><th>Situação</th></tr></thead>
                     <tbody>
-                    @foreach($byTime as $row)
-                        @php($pct = $row->total ? round($row->booked / $row->total * 100) : 0)
+                    @foreach($byTime as $slot)
+                        @php($a = $slot->activeAppointment)
                         <tr>
-                            <td><strong>{{ substr($row->start_time, 0, 5) }}</strong></td>
-                            <td>{{ $row->booked }}</td>
-                            <td>{{ $row->total - $row->booked }}</td>
-                            <td style="min-width:140px"><div class="progress"><span style="width: {{ $pct }}%"></span></div><span class="small muted">{{ $pct }}%</span></td>
+                            <td><strong>{{ substr($slot->start_time, 0, 5) }}</strong></td>
+                            <td class="nowrap">{{ $slot->class_name }}</td>
+                            <td>
+                                @if($a)
+                                    {{ $a->responsible_name }}
+                                    <div class="small muted">{{ $a->student_name }}</div>
+                                @else
+                                    <span class="muted">—</span>
+                                @endif
+                            </td>
+                            <td>
+                                @if($a)
+                                    <span class="badge badge-red">Reservado</span>
+                                @else
+                                    <span class="badge badge-green">Livre</span>
+                                @endif
+                            </td>
                         </tr>
                     @endforeach
                     </tbody>

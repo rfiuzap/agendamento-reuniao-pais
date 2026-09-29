@@ -33,9 +33,11 @@ class ReportController extends Controller
                 ->get();
 
             $byTime = (clone $base)
-                ->groupBy('time_slots.start_time')
+                ->join('classes as c', 'c.id', '=', 'time_slots.class_id')
+                ->with('activeAppointment')
                 ->orderBy('time_slots.start_time')
-                ->selectRaw("time_slots.start_time, count(*) as total, {$booked} as booked")
+                ->orderBy('c.name')
+                ->select('time_slots.*', 'c.name as class_name')
                 ->get();
         }
 
