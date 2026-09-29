@@ -64,9 +64,9 @@ class Appointment extends Model
     protected function auditValue(string $field, mixed $value): string
     {
         if ($field === 'time_slot_id') {
-            $slot = $value ? TimeSlot::with('schoolClass', 'meeting')->find($value) : null;
+            $slot = $value ? TimeSlot::with('schoolClass.schoolYear', 'meeting')->find($value) : null;
 
-            return $slot ? $slot->meeting->date->format('d/m').' · '.$slot->schoolClass?->name.' · '.$slot->label() : '';
+            return $slot ? $slot->meeting->date->format('d/m').' · '.$slot->schoolClass?->fullName().' · '.$slot->label() : '';
         }
 
         return $field === 'status' ? (self::STATUSES[$value] ?? (string) $value) : $this->defaultAuditValue($field, $value);

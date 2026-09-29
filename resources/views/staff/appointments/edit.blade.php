@@ -13,12 +13,12 @@
             <dt>Reunião</dt><dd>{{ $appointment->meeting->name }} · {{ $appointment->meeting->date->format('d/m/Y') }}</dd>
             <dt>Responsável</dt><dd>{{ $appointment->responsible_name }} ({{ $appointment->responsible_email }})</dd>
             <dt>Aluno</dt><dd>{{ $appointment->student_name }}</dd>
-            <dt>Horário atual</dt><dd>{{ $appointment->timeSlot?->schoolClass?->name }} · {{ $appointment->timeSlot?->label() ?? '—' }}</dd>
+            <dt>Horário atual</dt><dd>{{ $appointment->timeSlot?->schoolClass?->fullName() }} · {{ $appointment->timeSlot?->label() ?? '—' }}</dd>
         </dl>
         <p class="muted small">Escolha o novo horário. O responsável receberá um e-mail com a alteração.</p>
 
         @foreach($slots->groupBy('class_id') as $classSlots)
-            <h3 class="mt-3">{{ $classSlots->first()->schoolClass->name }}</h3>
+            <h3 class="mt-3">{{ $classSlots->first()->schoolClass->fullName() }}</h3>
             @include('partials.slot-grid', [
                 'slots' => $classSlots,
                 'action' => route('staff.appointments.update', $appointment),

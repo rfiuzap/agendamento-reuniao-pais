@@ -7,7 +7,7 @@
     @include('parent._steps', ['current' => 3])
     <h1>Escolha um horário</h1>
     <p class="muted">
-        {{ $class->name }}@if($class->teacher) · Prof.ª {{ $class->teacher->name }}@endif<br>
+        {{ $class->fullName() }}@if($class->teacher) · Prof.ª {{ $class->teacher->name }}@endif<br>
         {{ $meeting->date->translatedFormat('l, d/m/Y') }} · Aluno: <strong>{{ $draft['student_name'] }}</strong>
     </p>
 

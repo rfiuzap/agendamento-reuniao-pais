@@ -38,6 +38,19 @@ class SchoolClass extends Model
         return $this->hasMany(TimeSlot::class, 'class_id');
     }
 
+    /** "1º ano A manhã": class names repeat across rooms, so show the room wherever it is not already visible. */
+    public function fullName(): string
+    {
+        $year = (string) $this->schoolYear?->name;
+
+        return $year === '' || str_starts_with($this->name, $year.' ') ? $this->name : $year.' '.$this->name;
+    }
+
+    public function auditTitle(): string
+    {
+        return $this->fullName();
+    }
+
     public function auditEntity(): string
     {
         return 'class';

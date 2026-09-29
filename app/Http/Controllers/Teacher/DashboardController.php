@@ -32,7 +32,7 @@ class DashboardController extends Controller
         if ($meeting) {
             $rows = TimeSlot::where('meeting_id', $meeting->id)
                 ->whereIn('class_id', $visibleClasses->pluck('id'))
-                ->with(['activeAppointment', 'schoolClass'])
+                ->with(['activeAppointment', 'schoolClass.schoolYear'])
                 ->orderBy('start_time')
                 ->get()
                 ->groupBy('class_id');

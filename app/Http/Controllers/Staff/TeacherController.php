@@ -16,7 +16,7 @@ class TeacherController extends Controller
 {
     public function index(): View
     {
-        $teachers = User::teachers()->with('classes')->orderBy('name')->get();
+        $teachers = User::teachers()->with('classes.schoolYear')->orderBy('name')->get();
 
         return view('staff.teachers.index', compact('teachers'));
     }
@@ -73,8 +73,8 @@ class TeacherController extends Controller
     /** Adds "Turmas vinculadas: antes → depois" to the teacher's audit entry. */
     private function trackClasses(User $teacher, array $classIds): void
     {
-        $before = $teacher->exists ? $teacher->classes()->pluck('name')->join(', ') : '';
-        $after = SchoolClass::whereIn('id', $classIds)->orderBy('name')->pluck('name')->join(', ');
+        $before = $teacher->exists ? $teacher->classes()->with('schoolYear')->get()->map->fullName()->sort(SORT_NATURAL)->join(', ') : '';
+        $after = SchoolClass::with('schoolYear')->whereIn('id', $classIds)->get()->map->fullName()->sort(SORT_NATURAL)->join(', ');
 
         if ($before !== $after) {
             $teacher->auditExtra = [['campo' => 'Turmas vinculadas', 'antes' => $before, 'depois' => $after]];

@@ -47,7 +47,7 @@ class ImportTeachers extends Command
                 continue;
             }
             $emails[$email] = $teacher;
-            $rows[] = ['year' => $year, 'class' => $year.' '.$class, 'teacher' => $teacher, 'email' => $email];
+            $rows[] = ['year' => $year, 'class' => $class, 'teacher' => $teacher, 'email' => $email];
         }
 
         $simulate = (bool) $this->option('simular');
@@ -97,12 +97,12 @@ class ImportTeachers extends Command
             $status[] = 'professora já existia';
         }
 
-        $class = SchoolClass::where('name', $row['class'])->first();
+        $class = SchoolClass::where('school_year_id', $year->id)->where('name', $row['class'])->first();
         if (! $class) {
             SchoolClass::create(['school_year_id' => $year->id, 'name' => $row['class'], 'teacher_id' => $user->id, 'active' => true]);
             $status[] = 'turma criada';
-        } elseif ($class->teacher_id !== $user->id || $class->school_year_id !== $year->id) {
-            $class->update(['school_year_id' => $year->id, 'teacher_id' => $user->id]);
+        } elseif ($class->teacher_id !== $user->id) {
+            $class->update(['teacher_id' => $user->id]);
             $status[] = 'turma atualizada';
         } else {
             $status[] = 'turma já existia';

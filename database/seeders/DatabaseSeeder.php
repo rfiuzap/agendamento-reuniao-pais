@@ -53,7 +53,8 @@ class DatabaseSeeder extends Seeder
                 $name = "{$yearName} {$letter}";
                 $classIds[$name] = SchoolClass::create([
                     'school_year_id' => $year->id,
-                    'name' => $name,
+                    'name' => $letter, // the room name is not repeated in the class name
+
                     'teacher_id' => $teachers[$name]->id,
                     'active' => true,
                 ])->id;

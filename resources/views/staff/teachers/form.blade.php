@@ -39,7 +39,7 @@
                         @forelse($list as $class)
                             <label class="check">
                                 <input type="checkbox" name="class_ids[]" value="{{ $class->id }}" @checked(in_array($class->id, $selected))>
-                                <span>{{ $class->name }}
+                                <span>{{ $class->fullName() }}
                                     @if($class->teacher && $class->teacher_id !== $teacher->id)
                                         <span class="small muted">({{ $class->teacher->name }})</span>
                                     @endif

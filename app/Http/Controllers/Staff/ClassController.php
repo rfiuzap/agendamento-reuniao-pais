@@ -77,9 +77,9 @@ class ClassController extends Controller
     {
         $data = $request->validate([
             'school_year_id' => ['required', 'integer', Rule::exists('school_years', 'id')],
-            'name' => ['required', 'string', 'max:80', Rule::unique('classes')->ignore($class)],
+            'name' => ['required', 'string', 'max:80', Rule::unique('classes')->where('school_year_id', (int) $request->input('school_year_id'))->ignore($class)],
             'teacher_id' => ['nullable', 'integer', Rule::exists('users', 'id')->where('role', User::ROLE_TEACHER)],
-        ], [], ['school_year_id' => 'sala/ano', 'name' => 'nome', 'teacher_id' => 'professora']);
+        ], ['name.unique' => 'Já existe uma turma com esse nome nesta sala/ano.'], ['school_year_id' => 'sala/ano', 'name' => 'nome', 'teacher_id' => 'professora']);
         $data['active'] = $request->boolean('active');
 
         return $data;

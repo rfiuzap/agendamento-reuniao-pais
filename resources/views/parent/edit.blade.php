@@ -6,7 +6,7 @@
 @section('content')
     <h1>Alterar horário</h1>
     <p class="muted">
-        {{ $appointment->student_name }} · {{ $appointment->timeSlot->schoolClass->name }}<br>
+        {{ $appointment->student_name }} · {{ $appointment->timeSlot->schoolClass->fullName() }}<br>
         {{ $appointment->meeting->date->translatedFormat('l, d/m/Y') }} · Horário atual:
         <strong>{{ substr($appointment->timeSlot->start_time, 0, 5) }}</strong>
     </p>

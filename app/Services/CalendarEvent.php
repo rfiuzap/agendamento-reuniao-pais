@@ -26,7 +26,7 @@ class CalendarEvent
         return implode("\n", array_filter([
             $this->appointment->meeting->name,
             'Aluno: '.$this->appointment->student_name,
-            $class ? 'Turma: '.$class->name : null,
+            $class ? 'Turma: '.$class->fullName() : null,
             $class?->teacher ? 'Professora: '.$class->teacher->name : null,
             'Para alterar ou cancelar: '.route('parent.login'),
         ]));

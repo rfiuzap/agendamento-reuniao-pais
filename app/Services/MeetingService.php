@@ -21,7 +21,7 @@ class MeetingService
         $classIds = array_values(array_unique(array_map('intval', $classIds)));
 
         return DB::transaction(function () use ($meeting, $data, $classIds) {
-            $names = fn (array $ids) => SchoolClass::whereIn('id', $ids)->orderBy('name')->pluck('name')->join(', ');
+            $names = fn (array $ids) => SchoolClass::with('schoolYear')->whereIn('id', $ids)->get()->map->fullName()->sort(SORT_NATURAL)->join(', ');
             $before = $meeting->exists ? $names($meeting->classes()->pluck('classes.id')->all()) : '';
             $after = $names($classIds);
             if ($before !== $after) {

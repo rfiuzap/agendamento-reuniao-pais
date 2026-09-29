@@ -19,7 +19,7 @@
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #e2e8f0;border-radius:10px;font-size:14px;">
         <tr><td style="padding:10px 14px;color:#64748b;width:40%;">Reunião</td><td style="padding:10px 14px;font-weight:bold;">{{ $appointment->meeting->name }}</td></tr>
         <tr><td style="padding:10px 14px;color:#64748b;border-top:1px solid #e2e8f0;">Aluno</td><td style="padding:10px 14px;border-top:1px solid #e2e8f0;">{{ $appointment->student_name }}</td></tr>
-        <tr><td style="padding:10px 14px;color:#64748b;border-top:1px solid #e2e8f0;">Turma</td><td style="padding:10px 14px;border-top:1px solid #e2e8f0;">{{ $class?->name ?? '—' }}</td></tr>
+        <tr><td style="padding:10px 14px;color:#64748b;border-top:1px solid #e2e8f0;">Turma</td><td style="padding:10px 14px;border-top:1px solid #e2e8f0;">{{ $class?->fullName() ?? '—' }}</td></tr>
         <tr><td style="padding:10px 14px;color:#64748b;border-top:1px solid #e2e8f0;">Data</td><td style="padding:10px 14px;border-top:1px solid #e2e8f0;">{{ $appointment->meeting->date->format('d/m/Y') }}</td></tr>
         <tr><td style="padding:10px 14px;color:#64748b;border-top:1px solid #e2e8f0;">Horário</td><td style="padding:10px 14px;border-top:1px solid #e2e8f0;font-weight:bold;">{{ $slot ? substr($slot->start_time, 0, 5).' às '.substr($slot->end_time, 0, 5) : '—' }}</td></tr>
         <tr><td style="padding:10px 14px;color:#64748b;border-top:1px solid #e2e8f0;">Professora</td><td style="padding:10px 14px;border-top:1px solid #e2e8f0;">{{ $class?->teacher?->name ?? '—' }}</td></tr>

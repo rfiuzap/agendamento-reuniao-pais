@@ -48,9 +48,10 @@ class DashboardController extends Controller
 
         $occupancy = (clone $slots)
             ->leftJoin('users as t', 't.id', '=', 'c.teacher_id')
-            ->groupBy('m.id', 'm.name', 'm.date', 'c.id', 'c.name', 't.name')
-            ->orderBy('m.date')->orderBy('c.name')
-            ->selectRaw("m.name as meeting_name, m.date as meeting_date, c.name as class_name, t.name as teacher_name,
+            ->join('school_years as y', 'y.id', '=', 'c.school_year_id')
+            ->groupBy('m.id', 'm.name', 'm.date', 'c.id', 'c.name', 'y.name', 't.name')
+            ->orderBy('m.date')->orderBy('y.name')->orderBy('c.name')
+            ->selectRaw("m.name as meeting_name, m.date as meeting_date, c.name as class_name, y.name as year_name, t.name as teacher_name,
                 count(*) as total, sum(case when time_slots.status = 'booked' then 1 else 0 end) as booked")
             ->limit(100)
             ->get();

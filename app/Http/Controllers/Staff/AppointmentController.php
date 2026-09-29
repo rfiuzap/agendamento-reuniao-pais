@@ -40,7 +40,9 @@ class AppointmentController extends Controller
         if ($group) {
             $groupKey = ['meeting' => 'meeting_name', 'year' => 'school_year_name', 'class' => 'class_name'][$group];
             $items = $query->limit(2000)->get();
-            $grouped = $items->groupBy(fn ($a) => $a->{$groupKey} ?? 'Sem turma');
+            $grouped = $items->groupBy(fn ($a) => $group === 'class'
+                ? trim($a->school_year_name.' '.$a->class_name) ?: 'Sem turma' // same class name exists in several rooms
+                : ($a->{$groupKey} ?? 'Sem turma'));
             $appointments = null;
         } else {
             $appointments = $query->paginate(50)->withQueryString();

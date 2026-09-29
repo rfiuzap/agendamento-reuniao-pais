@@ -17,7 +17,7 @@
                     <td><strong>{{ $teacher->name }}</strong></td>
                     <td>{{ $teacher->username }}</td>
                     <td>{{ $teacher->email }}</td>
-                    <td>{{ $teacher->classes->pluck('name')->join(', ') ?: '—' }}</td>
+                    <td>{{ $teacher->classes->map->fullName()->join(', ') ?: '—' }}</td>
                     <td><span class="badge {{ $teacher->active ? 'badge-green' : '' }}">{{ $teacher->active ? 'Ativa' : 'Inativa' }}</span></td>
                     <td class="text-right"><a href="{{ route('staff.teachers.edit', $teacher) }}" class="btn btn-light btn-sm">Editar</a></td>
                 </tr>

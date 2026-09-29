@@ -33,7 +33,7 @@ class ImportTeachersTest extends TestCase
         $this->artisan('app:importar-professoras', ['arquivo' => $file])->assertSuccessful();
 
         $this->assertSame(['G1', 'G2'], SchoolYear::orderBy('name')->pluck('name')->all());
-        $this->assertSame(['G1 berçário manhã', 'G2 A manhã'], SchoolClass::orderBy('name')->pluck('name')->all());
+        $this->assertSame(['A manhã', 'berçário manhã'], SchoolClass::orderBy('name')->pluck('name')->all());
 
         $ana = User::where('email', 'ana@escola-exemplo.com.br')->firstOrFail();
         $this->assertSame('ana', $ana->username);
@@ -41,7 +41,23 @@ class ImportTeachersTest extends TestCase
         $this->assertTrue($ana->must_change_password);
         $this->assertTrue(Hash::check('morumbi', $ana->password));
         $this->assertSame('bia', User::where('email', 'bia@escola-exemplo.com.br')->value('username'));
-        $this->assertSame($ana->id, SchoolClass::where('name', 'G1 berçário manhã')->value('teacher_id'));
+        $this->assertSame($ana->id, SchoolClass::where('name', 'berçário manhã')->value('teacher_id'));
+    }
+
+    public function test_same_class_name_in_different_rooms_is_allowed_but_not_in_the_same_room(): void
+    {
+        $file = $this->file("1º ano - A manhã - Ana Teste - ana@escola-exemplo.com.br\n2º ano - A manhã - Bia Teste - bia@escola-exemplo.com.br");
+        $this->artisan('app:importar-professoras', ['arquivo' => $file])->assertSuccessful();
+
+        $classes = SchoolClass::with('schoolYear')->orderBy('school_year_id')->get();
+        $this->assertSame(['A manhã', 'A manhã'], $classes->pluck('name')->all());
+        $this->assertSame(['1º ano A manhã', '2º ano A manhã'], $classes->map->fullName()->all());
+
+        $this->actingAs(User::create(['name' => 'Admin', 'email' => 'adm@escola-exemplo.com.br', 'username' => 'adm', 'password' => 'x', 'role' => 'admin', 'active' => true]));
+        $this->post(route('staff.classes.store'), ['school_year_id' => $classes[0]->school_year_id, 'name' => 'A manhã', 'active' => '1'])
+            ->assertSessionHasErrors('name');
+        $this->post(route('staff.classes.store'), ['school_year_id' => $classes[0]->school_year_id, 'name' => 'B manhã', 'active' => '1'])
+            ->assertSessionHasNoErrors();
     }
 
     public function test_simulation_writes_nothing_and_rerun_keeps_existing_password(): void

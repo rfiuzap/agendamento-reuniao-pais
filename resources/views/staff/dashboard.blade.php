@@ -36,7 +36,7 @@
                     @php($pct = $row->total ? round($row->booked / $row->total * 100) : 0)
                     <tr>
                         <td>{{ \Carbon\Carbon::parse($row->meeting_date)->format('d/m/Y') }} · {{ $row->meeting_name }}</td>
-                        <td class="nowrap">{{ $row->class_name }}</td>
+                        <td class="nowrap">{{ $row->year_name }} {{ $row->class_name }}</td>
                         <td>{{ $row->teacher_name ?? '—' }}</td>
                         <td>{{ $row->booked }}</td>
                         <td>{{ $row->total - $row->booked }}</td>

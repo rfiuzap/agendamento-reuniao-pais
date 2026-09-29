@@ -6,7 +6,7 @@
     <div class="page-header">
         <div>
             <h1>{{ $teacher->name }}</h1>
-            <p class="muted mb-0">Turmas: {{ $classes->pluck('name')->join(', ') ?: 'nenhuma turma vinculada' }}</p>
+            <p class="muted mb-0">Turmas: {{ $classes->map->fullName()->join(', ') ?: 'nenhuma turma vinculada' }}</p>
         </div>
     </div>
 
@@ -29,7 +29,7 @@
                         <select id="class_id" name="class_id">
                             <option value="">Todas</option>
                             @foreach($classes as $c)
-                                <option value="{{ $c->id }}" @selected($classFilter == $c->id)>{{ $c->name }}</option>
+                                <option value="{{ $c->id }}" @selected($classFilter == $c->id)>{{ $c->fullName() }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -46,7 +46,7 @@
         @forelse($rows as $classId => $slots)
             <div class="card">
                 <div class="card-header">
-                    <h2>{{ $slots->first()->schoolClass->name }}</h2>
+                    <h2>{{ $slots->first()->schoolClass->fullName() }}</h2>
                     <span class="muted">Reunião: {{ $meeting->date->format('d/m/Y') }}</span>
                 </div>
                 <div class="table-wrap">
