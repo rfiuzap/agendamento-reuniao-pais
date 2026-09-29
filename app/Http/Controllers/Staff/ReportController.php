@@ -34,10 +34,11 @@ class ReportController extends Controller
 
             $byTime = (clone $base)
                 ->join('classes as c', 'c.id', '=', 'time_slots.class_id')
+                ->join('school_years as y', 'y.id', '=', 'c.school_year_id')
                 ->with('activeAppointment')
                 ->orderBy('time_slots.start_time')
                 ->orderBy('c.name')
-                ->select('time_slots.*', 'c.name as class_name')
+                ->select('time_slots.*', 'c.name as class_name', 'y.name as year_name')
                 ->get();
         }
 

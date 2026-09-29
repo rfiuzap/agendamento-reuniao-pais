@@ -11,7 +11,7 @@
     <meta name="theme-color" content="#1e3a8a">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="Reunião de Pais">
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v=6">
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v=7">
     <script src="{{ asset('js/app.js') }}?v=4" defer data-sw="{{ asset('sw.js') }}"></script>
 </head>
 <body>

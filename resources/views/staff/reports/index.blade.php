@@ -26,12 +26,15 @@
     @else
         @php($total = $byClass->sum('total'))
         @php($booked = $byClass->sum('booked'))
+        @php($pct = fn ($part, $whole) => $whole ? round($part / $whole * 100) : 0)
         <div class="stats mt-2">
             <div class="stat"><div class="stat-label">Horários</div><div class="stat-value">{{ $total }}</div></div>
-            <div class="stat"><div class="stat-label">Reservados</div><div class="stat-value">{{ $booked }}</div></div>
-            <div class="stat"><div class="stat-label">Disponíveis</div><div class="stat-value">{{ $total - $booked }}</div></div>
-            <div class="stat"><div class="stat-label">Ocupação</div><div class="stat-value">{{ $total ? round($booked / $total * 100) : 0 }}%</div></div>
-            <div class="stat"><div class="stat-label">Cancelamentos</div><div class="stat-value">{{ $cancelled }}</div></div>
+            <div class="stat"><div class="stat-label">Reservados</div><div class="stat-value">{{ $booked }} <span class="stat-pct">{{ $pct($booked, $total) }}%</span></div></div>
+            <div class="stat"><div class="stat-label">Disponíveis</div><div class="stat-value">{{ $total - $booked }} <span class="stat-pct">{{ $pct($total - $booked, $total) }}%</span></div></div>
+            <div class="stat" title="Percentual sobre todos os agendamentos feitos (ativos + cancelados)">
+                <div class="stat-label">Cancelamentos</div>
+                <div class="stat-value">{{ $cancelled }} <span class="stat-pct">{{ $pct($cancelled, $booked + $cancelled) }}%</span></div>
+            </div>
         </div>
 
         <div class="card">
@@ -60,12 +63,13 @@
             <h2>Horários</h2>
             <div class="table-wrap">
                 <table>
-                    <thead><tr><th>Horário</th><th>Turma</th><th>Responsável / Aluno</th><th>Situação</th></tr></thead>
+                    <thead><tr><th>Horário</th><th>Sala</th><th>Turma</th><th>Responsável / Aluno</th><th>Situação</th></tr></thead>
                     <tbody>
                     @foreach($byTime as $slot)
                         @php($a = $slot->activeAppointment)
                         <tr>
                             <td><strong>{{ substr($slot->start_time, 0, 5) }}</strong></td>
+                            <td class="nowrap">{{ $slot->year_name }}</td>
                             <td class="nowrap">{{ $slot->class_name }}</td>
                             <td>
                                 @if($a)
