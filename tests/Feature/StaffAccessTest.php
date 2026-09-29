@@ -92,6 +92,10 @@ class StaffAccessTest extends TestCase
         $this->get(route('staff.appointments.index', ['class_id' => $b->id]))->assertSee('Aluno Beta')->assertDontSee('Aluno Alfa');
         $this->get(route('staff.meetings.show', $meeting))->assertOk();
 
+        $this->get(route('staff.reports.index', ['meeting_id' => $meeting->id]))->assertOk()
+            ->assertSee('Aluno Alfa')->assertDontSee('Histórico de alterações');
+        $this->get(route('staff.reports.logs'))->assertForbidden();
+
         $this->get(route('staff.dashboard'))->assertForbidden();
         $this->get(route('staff.meetings.create'))->assertForbidden();
         $this->get(route('staff.users.index'))->assertForbidden();

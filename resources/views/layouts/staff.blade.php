@@ -57,6 +57,12 @@
                 </div>
             @endif
 
+            @if($user->hasRole('coordinator'))
+                <div class="nav-group">
+                    <a href="{{ route('staff.reports.index') }}" class="{{ $is('staff.reports.*') }}">Relatórios</a>
+                </div>
+            @endif
+
             @if($user->isAdmin())
                 <div class="nav-group">
                     <div class="nav-title">Administração</div>

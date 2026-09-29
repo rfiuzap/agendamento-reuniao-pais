@@ -66,6 +66,7 @@ Route::prefix('admin')->name('staff.')->group(function () {
         Route::get('/reunioes/{meeting}', [MeetingController::class, 'show'])->whereNumber('meeting')->name('meetings.show');
         Route::get('/salas', [SchoolYearController::class, 'index'])->name('years.index');
         Route::get('/turmas', [ClassController::class, 'index'])->name('classes.index');
+        Route::get('/relatorios', [ReportController::class, 'index'])->name('reports.index');
     });
 
     Route::middleware(['auth', 'role:admin'])->group(function () {
@@ -86,7 +87,6 @@ Route::prefix('admin')->name('staff.')->group(function () {
         Route::put('/agendamentos/{appointment}', [AppointmentController::class, 'update'])->name('appointments.update');
         Route::post('/agendamentos/{appointment}/cancelar', [AppointmentController::class, 'cancel'])->name('appointments.cancel');
 
-        Route::get('/relatorios', [ReportController::class, 'index'])->name('reports.index');
         Route::get('/relatorios/logs', [ReportController::class, 'logs'])->name('reports.logs');
         Route::get('/configuracoes', [SettingController::class, 'edit'])->name('settings.edit');
         Route::put('/configuracoes', [SettingController::class, 'update'])->name('settings.update');

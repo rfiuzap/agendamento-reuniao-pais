@@ -5,7 +5,9 @@
 @section('content')
     <div class="page-header">
         <h1>Relatórios</h1>
-        <a href="{{ route('staff.reports.logs') }}" class="btn btn-light">Histórico de alterações</a>
+        @if(auth()->user()->isAdmin())
+            <a href="{{ route('staff.reports.logs') }}" class="btn btn-light">Histórico de alterações</a>
+        @endif
     </div>
 
     <form method="GET" class="filters" data-autosubmit>
