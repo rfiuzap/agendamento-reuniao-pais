@@ -14,7 +14,7 @@
 @php
     $user = auth()->user();
     $is = fn (string ...$patterns) => request()->routeIs(...$patterns) ? 'active' : '';
-    $group = request('group');
+    $group = \App\Http\Controllers\Staff\AppointmentController::currentGroup(request());
 @endphp
 <div class="staff">
     <aside class="sidebar" aria-label="Menu principal">
@@ -51,7 +51,7 @@
                 <div class="nav-group">
                     <div class="nav-title">Agendamentos</div>
                     @foreach(\App\Http\Controllers\Staff\AppointmentController::GROUPS as $key => $label)
-                        <a href="{{ route('staff.appointments.index', $key ? ['group' => $key] : []) }}"
+                        <a href="{{ route('staff.appointments.index', ['group' => $key]) }}"
                            class="{{ request()->routeIs('staff.appointments.index') && (string) $group === $key ? 'active' : '' }}">{{ $label }}</a>
                     @endforeach
                 </div>

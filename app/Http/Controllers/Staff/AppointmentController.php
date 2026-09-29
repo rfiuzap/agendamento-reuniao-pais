@@ -19,11 +19,19 @@ use Illuminate\View\View;
 class AppointmentController extends Controller
 {
     public const GROUPS = [
-        '' => 'Todos',
+        'all' => 'Todos',
         'meeting' => 'Por reunião',
-        'year' => 'Por sala',
         'class' => 'Por turma',
     ];
+
+    public const DEFAULT_GROUP = 'meeting';
+
+    public static function currentGroup(Request $request): string
+    {
+        $group = (string) $request->query('group', self::DEFAULT_GROUP);
+
+        return array_key_exists($group, self::GROUPS) ? $group : self::DEFAULT_GROUP;
+    }
 
     public function __construct(private AppointmentService $appointments)
     {
@@ -32,13 +40,13 @@ class AppointmentController extends Controller
     public function index(Request $request): View
     {
         $filters = AppointmentQuery::filtersFrom($request);
-        $group = array_key_exists($request->query('group', ''), self::GROUPS) ? $request->query('group', '') : '';
+        $group = self::currentGroup($request);
 
         $query = AppointmentQuery::build($filters);
         $total = (clone $query)->count();
 
-        if ($group) {
-            $groupKey = ['meeting' => 'meeting_name', 'year' => 'school_year_name', 'class' => 'class_name'][$group];
+        if ($group !== 'all') {
+            $groupKey = ['meeting' => 'meeting_name', 'class' => 'class_name'][$group];
             $items = $query->limit(2000)->get();
             $grouped = $items->groupBy(fn ($a) => $group === 'class'
                 ? trim($a->school_year_name.' '.$a->class_name) ?: 'Sem turma' // same class name exists in several rooms
