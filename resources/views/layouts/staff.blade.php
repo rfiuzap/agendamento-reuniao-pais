@@ -7,7 +7,7 @@
     <title>@yield('title') · {{ $schoolName }}</title>
     <link rel="icon" href="{{ $logoUrl }}">
     <link rel="manifest" href="{{ route('manifest') }}">
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v=9">
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v=10">
     <script src="{{ asset('js/app.js') }}?v=4" defer></script>
 </head>
 <body>

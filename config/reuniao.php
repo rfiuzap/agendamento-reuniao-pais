@@ -2,7 +2,7 @@
 
 return [
     // Shown in the footer; bumped on every delivered improvement.
-    'version' => '1.16',
+    'version' => '1.17',
 
     // Parent access code (sent by e-mail)
     'code_ttl_minutes' => (int) env('AUTH_CODE_TTL_MINUTES', 10),

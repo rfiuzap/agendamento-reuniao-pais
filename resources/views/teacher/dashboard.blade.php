@@ -3,17 +3,23 @@
 @section('title', 'Minhas turmas')
 
 @section('content')
-    <div class="page-header">
+    <div class="page-header no-print">
         <div>
             <h1>{{ $teacher->name }}</h1>
             <p class="muted mb-0">Turmas: {{ $classes->map->fullName()->join(', ') ?: 'nenhuma turma vinculada' }}</p>
         </div>
+        @if($rows->isNotEmpty())
+            <button type="button" class="btn" onclick="window.print()">
+                <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                Imprimir
+            </button>
+        @endif
     </div>
 
     @if($meetings->isEmpty())
         <div class="card empty">Nenhuma reunião cadastrada para suas turmas.</div>
     @else
-        <div class="card mb-2">
+        <div class="card mb-2 no-print">
             <form method="GET" class="filters" data-autosubmit>
                 <div class="field">
                     <label for="meeting_id">Reunião</label>
@@ -37,17 +43,20 @@
             </form>
         </div>
 
-        <div class="stats mt-2">
+        <div class="stats mt-2 no-print">
             @foreach($stats as $label => $value)
                 <div class="stat"><div class="stat-label">{{ $label }}</div><div class="stat-value">{{ $value }}</div></div>
             @endforeach
         </div>
 
         @forelse($rows as $classId => $slots)
-            <div class="card">
+            <div class="card class-card">
                 <div class="card-header">
-                    <h2>{{ $slots->first()->schoolClass->fullName() }}</h2>
-                    <span class="muted">Reunião: {{ $meeting->date->format('d/m/Y') }}</span>
+                    <div>
+                        <h2>{{ $slots->first()->schoolClass->fullName() }}</h2>
+                        <div class="muted small">Prof.ª {{ $teacher->name }}</div>
+                    </div>
+                    <span class="muted">{{ $meeting->name }} · {{ $meeting->date->format('d/m/Y') }}</span>
                 </div>
                 <div class="table-wrap">
                     <table>

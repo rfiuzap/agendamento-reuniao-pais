@@ -270,7 +270,19 @@ tbody tr:hover { background: #f8fafc; }
 }
 
 @media print {
-    .sidebar, .topbar, .filters, .actions, .btn { display: none !important; }
+    @page { size: A4 portrait; margin: 10mm; }
+    .sidebar, .topbar, .filters, .actions, .btn, .no-print, .alert { display: none !important; }
     .staff { display: block; }
-    body { background: #fff; }
+    body { background: #fff; font-size: 11px; }
+    .content { padding: 0; max-width: none; }
+
+    /* Class schedule: one compact A4 page per class */
+    .class-card { box-shadow: none; border: 1px solid #cbd5e1; padding: 0; margin: 0; break-inside: avoid; }
+    .class-card + .class-card { break-before: page; }
+    .class-card .card-header { margin: 0; padding: 8px 10px; border-bottom: 1px solid #cbd5e1; }
+    .class-card h2 { font-size: 15px; }
+    .class-card .table-wrap { border: 0; border-radius: 0; overflow: visible; }
+    .class-card th, .class-card td { padding: 4px 8px; font-size: 11px; }
+    .class-card tbody tr { break-inside: avoid; }
+    .class-card .badge { border: 1px solid #94a3b8; background: none !important; color: #000 !important; }
 }
