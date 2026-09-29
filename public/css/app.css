@@ -132,6 +132,10 @@ tbody tr:hover { background: #f8fafc; }
 .history-changes { margin: .6rem 0 0; padding: .6rem 0 0; border-top: 1px dashed var(--border); list-style: none; display: grid; gap: .3rem; font-size: .92rem; }
 .history-field { color: var(--muted); font-weight: 600; margin-right: .25rem; }
 .history-changes del { color: var(--red); text-decoration-thickness: 1px; }
+.class-columns { display: grid; gap: 1rem 1.5rem; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.class-columns > div { display: flex; flex-direction: column; gap: .45rem; }
+.class-column-title { font-size: .8rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); margin: 0 0 .25rem; padding-bottom: .35rem; border-bottom: 1px solid var(--border); }
+@media (max-width: 700px) { .class-columns { grid-template-columns: 1fr; } }
 .stat-pct { font-size: .95rem; font-weight: 600; color: var(--muted); margin-left: .25rem; }
 
 /* Filters */
