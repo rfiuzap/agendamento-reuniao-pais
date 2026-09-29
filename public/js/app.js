@@ -86,24 +86,26 @@ document.addEventListener('DOMContentLoaded', () => {
     if (swUrl && 'serviceWorker' in navigator) navigator.serviceWorker.register(swUrl).catch(() => {});
     if (installBtn && !standalone) {
         let deferred = null;
-        const isIos = /iphone|ipad|ipod/i.test(navigator.userAgent);
+        const ua = navigator.userAgent;
+        const platform = /iphone|ipad|ipod/i.test(ua) || (/macintosh/i.test(ua) && navigator.maxTouchPoints > 1)
+            ? 'ios' : (/android/i.test(ua) ? 'android' : 'desktop');
+        installBtn.hidden = false;
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferred = e;
-            installBtn.hidden = false;
         });
-        if (isIos) installBtn.hidden = false;
         installBtn.addEventListener('click', async () => {
             if (deferred) {
                 deferred.prompt();
                 await deferred.userChoice;
                 deferred = null;
-                installBtn.hidden = true;
-            } else if (installHelp) {
-                installHelp.hidden = !installHelp.hidden;
+                return;
             }
+            // No direct install available: show the steps for this device.
+            installHelp.querySelectorAll('[data-platform]').forEach((el) => { el.hidden = el.dataset.platform !== platform; });
+            installHelp.hidden = !installHelp.hidden;
         });
-        window.addEventListener('appinstalled', () => { installBtn.hidden = true; });
+        window.addEventListener('appinstalled', () => { installBtn.hidden = true; installHelp.hidden = true; });
     }
 
     // Auto-submit filter selects

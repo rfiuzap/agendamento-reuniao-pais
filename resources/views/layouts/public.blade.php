@@ -11,8 +11,8 @@
     <meta name="theme-color" content="#1e3a8a">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="Reunião de Pais">
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v=5">
-    <script src="{{ asset('js/app.js') }}?v=3" defer data-sw="{{ asset('sw.js') }}"></script>
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v=6">
+    <script src="{{ asset('js/app.js') }}?v=4" defer data-sw="{{ asset('sw.js') }}"></script>
 </head>
 <body>
 @php($parentEmail = session(\App\Http\Middleware\EnsureParentAuthenticated::SESSION_EMAIL))
@@ -45,9 +45,11 @@
         <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="2" width="12" height="20" rx="2"/><path d="M12 7v7m-3-3 3 3 3-3M10 18h4"/></svg>
         Salvar no celular
     </button>
-    <p class="install-help" data-install-help hidden>
-        No iPhone: toque em <strong>Compartilhar</strong> <span aria-hidden="true">⎋</span> e depois em <strong>Adicionar à Tela de Início</strong>.
-    </p>
+    <div class="install-help" data-install-help hidden>
+        <p data-platform="ios">No Safari, toque em <strong>Compartilhar</strong> (quadrado com seta para cima) e depois em <strong>Adicionar à Tela de Início</strong>.</p>
+        <p data-platform="android">No Chrome, toque no menu <strong>⋮</strong> e depois em <strong>Adicionar à tela inicial</strong> ou <strong>Instalar app</strong>.</p>
+        <p data-platform="desktop">No Chrome ou Edge, clique no ícone de instalar na barra de endereço, ou no menu <strong>⋮</strong> → <strong>Instalar</strong>. No celular, abra este endereço e toque neste botão.</p>
+    </div>
     <div class="app-version">{{ \App\Support\AppVersion::label() }}</div>
 </footer>
 </body>
