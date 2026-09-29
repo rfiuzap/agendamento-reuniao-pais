@@ -1,0 +1,10 @@
+# Used when the hosting (e.g. HostGator shared) cannot point the domain to /public.
+# Every request is served from /public and project files (.env, storage, vendor...) stay inaccessible.
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
+
+<FilesMatch "^\.">
+    Require all denied
+</FilesMatch>
