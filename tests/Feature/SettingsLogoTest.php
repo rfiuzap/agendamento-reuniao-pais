@@ -44,7 +44,7 @@ class SettingsLogoTest extends TestCase
 
         $logo = Setting::get('logo');
         $this->created[] = $logo;
-        $this->assertMatchesRegularExpression('/^logo-\w{12}\.png$/', $logo);
+        $this->assertMatchesRegularExpression('/^icone-\w{12}\.png$/', $logo);
         $this->assertFileExists(public_path('uploads/'.$logo));
 
         $this->get(route('parent.login'))->assertSee('<link rel="icon" href="'.asset('uploads/'.$logo).'">', false);
@@ -54,6 +54,22 @@ class SettingsLogoTest extends TestCase
         $this->assertSame('', Setting::get('logo'));
         $this->assertFileDoesNotExist(public_path('uploads/'.$logo));
         $this->assertSame(asset('img/logo.svg'), Setting::logoUrl());
+    }
+
+    public function test_brand_logo_is_shown_in_headers_and_falls_back_to_icon(): void
+    {
+        $this->get(route('parent.login'))->assertSee('class="hero-logo"', false)->assertSee(asset('img/logo.svg'), false);
+
+        $this->save(['brand_logo' => UploadedFile::fake()->image('marca.png', 600, 200)])->assertSessionHasNoErrors();
+        $logo = Setting::get('brand_logo');
+        $this->created[] = $logo;
+        $this->assertMatchesRegularExpression('/^logo-\w{12}\.png$/', $logo);
+
+        $url = asset('uploads/'.$logo);
+        $this->get(route('parent.login'))->assertSee('<img src="'.$url.'"', false)
+            ->assertSee('<link rel="icon" href="'.asset('img/logo.svg').'">', false); // icon unchanged
+        $this->get(route('staff.settings.edit'))->assertSee('class="topbar-logo"', false)->assertSee($url, false)
+            ->assertSee('Ícone')->assertSee('Logo');
     }
 
     public function test_rejects_svg_and_non_images(): void

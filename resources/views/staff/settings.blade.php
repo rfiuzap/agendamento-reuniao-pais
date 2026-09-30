@@ -27,20 +27,37 @@
                 <label for="parent_instructions">Instruções exibidas aos responsáveis</label>
                 <textarea id="parent_instructions" name="parent_instructions" maxlength="1000">{{ old('parent_instructions', $settings['parent_instructions']) }}</textarea>
             </div>
-            <div class="field">
-                <label for="logo">Logo</label>
-                <div class="logo-field">
-                    <img src="{{ $logoUrl }}" alt="Logo atual" class="logo-preview" id="logo-preview">
-                    <div>
-                        <input type="file" id="logo" name="logo" accept="image/png,image/jpeg,image/webp"
-                               class="@error('logo') is-invalid @enderror">
-                        <div class="hint">PNG, JPG ou WEBP, até 1 MB. Prefira imagem quadrada: ela também é usada como ícone da aba do navegador.</div>
-                        @if($settings['logo'])
-                            <label class="check mt-1"><input type="checkbox" name="remove_logo" value="1"> Voltar ao logo padrão</label>
-                        @endif
+            <div class="grid-2">
+                <div class="field">
+                    <label for="brand_logo">Logo</label>
+                    <div class="logo-field">
+                        <img src="{{ $brandLogoUrl }}" alt="Logo atual" class="logo-preview logo-preview-wide">
+                        <div>
+                            <input type="file" id="brand_logo" name="brand_logo" accept="image/png,image/jpeg,image/webp"
+                                   class="@error('brand_logo') is-invalid @enderror">
+                            <div class="hint">Aparece no topo das páginas, na página inicial e na tela do código. PNG, JPG ou WEBP, até 1 MB. Pode ser horizontal.</div>
+                            @if($settings['brand_logo'])
+                                <label class="check mt-1"><input type="checkbox" name="remove_brand_logo" value="1"> Remover logo (usa o ícone)</label>
+                            @endif
+                        </div>
                     </div>
+                    @error('brand_logo')<div class="field-error">{{ $message }}</div>@enderror
                 </div>
-                @error('logo')<div class="field-error">{{ $message }}</div>@enderror
+                <div class="field">
+                    <label for="logo">Ícone</label>
+                    <div class="logo-field">
+                        <img src="{{ $logoUrl }}" alt="Ícone atual" class="logo-preview">
+                        <div>
+                            <input type="file" id="logo" name="logo" accept="image/png,image/jpeg,image/webp"
+                                   class="@error('logo') is-invalid @enderror">
+                            <div class="hint">Ícone da aba do navegador, do aplicativo no celular e do menu da equipe. Prefira imagem quadrada.</div>
+                            @if($settings['logo'])
+                                <label class="check mt-1"><input type="checkbox" name="remove_logo" value="1"> Voltar ao ícone padrão</label>
+                            @endif
+                        </div>
+                    </div>
+                    @error('logo')<div class="field-error">{{ $message }}</div>@enderror
+                </div>
             </div>
             <button type="submit" class="btn">Salvar</button>
         </div>

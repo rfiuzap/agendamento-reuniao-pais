@@ -7,7 +7,7 @@
     <title>@yield('title') · {{ $schoolName }}</title>
     <link rel="icon" href="{{ $logoUrl }}">
     <link rel="manifest" href="{{ route('manifest') }}">
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v=10">
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v=12">
     <script src="{{ asset('js/app.js') }}?v=4" defer></script>
 </head>
 <body>
@@ -84,7 +84,7 @@
     <div class="staff-main">
         <header class="topbar">
             <button type="button" class="menu-toggle" data-menu-toggle aria-label="Abrir menu">☰</button>
-            <div class="muted small">@yield('title')</div>
+            <div class="topbar-title"><img src="{{ $brandLogoUrl }}" alt="{{ $schoolName }}" class="topbar-logo"><span class="muted small">@yield('title')</span></div>
             <div class="user">
                 <span><strong>{{ $user->name }}</strong> <span class="role muted">· {{ $user->roleLabel() }}</span></span>
                 <a href="{{ route('staff.password.edit') }}" class="small">Alterar senha</a>

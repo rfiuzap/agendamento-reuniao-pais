@@ -286,3 +286,12 @@ tbody tr:hover { background: #f8fafc; }
     .class-card tbody tr { break-inside: avoid; }
     .class-card .badge { border: 1px solid #94a3b8; background: none !important; color: #000 !important; }
 }
+
+/* School logo (may be horizontal): fixed height, natural width */
+.brand img.brand-logo { width: auto; height: 40px; max-width: 180px; object-fit: contain; }
+.hero img.hero-logo { width: auto; height: 72px; max-width: 240px; object-fit: contain; }
+.topbar-title { display: flex; align-items: center; gap: .6rem; min-width: 0; }
+.topbar-logo { height: 30px; width: auto; max-width: 150px; object-fit: contain; }
+.logo-preview-wide { width: auto; max-width: 180px; }
+@media (max-width: 560px) { .topbar-title .muted { display: none; } }
+@media print { .topbar-title { display: none; } }
