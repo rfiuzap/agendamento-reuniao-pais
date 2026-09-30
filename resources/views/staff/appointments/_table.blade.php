@@ -1,5 +1,5 @@
 {{-- Expects: $rows (appointments from AppointmentQuery) --}}
-@php($canManage = auth()->user()->isAdmin())
+@php($canManage = auth()->user()->hasRole('admin', 'coordinator'))
 <div class="table-wrap">
     <table>
         <thead>

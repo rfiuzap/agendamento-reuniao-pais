@@ -67,6 +67,10 @@ Route::prefix('admin')->name('staff.')->group(function () {
         Route::get('/salas', [SchoolYearController::class, 'index'])->name('years.index');
         Route::get('/turmas', [ClassController::class, 'index'])->name('classes.index');
         Route::get('/relatorios', [ReportController::class, 'index'])->name('reports.index');
+
+        Route::get('/agendamentos/{appointment}/editar', [AppointmentController::class, 'edit'])->name('appointments.edit');
+        Route::put('/agendamentos/{appointment}', [AppointmentController::class, 'update'])->name('appointments.update');
+        Route::post('/agendamentos/{appointment}/cancelar', [AppointmentController::class, 'cancel'])->name('appointments.cancel');
     });
 
     Route::middleware(['auth', 'role:admin'])->group(function () {
@@ -82,10 +86,6 @@ Route::prefix('admin')->name('staff.')->group(function () {
             ->parameters(['professores' => 'teacher'])->except(['show', 'destroy'])->names('teachers');
         Route::resource('usuarios', UserController::class)
             ->parameters(['usuarios' => 'user'])->except(['show', 'destroy'])->names('users');
-
-        Route::get('/agendamentos/{appointment}/editar', [AppointmentController::class, 'edit'])->name('appointments.edit');
-        Route::put('/agendamentos/{appointment}', [AppointmentController::class, 'update'])->name('appointments.update');
-        Route::post('/agendamentos/{appointment}/cancelar', [AppointmentController::class, 'cancel'])->name('appointments.cancel');
 
         Route::get('/relatorios/logs', [ReportController::class, 'logs'])->name('reports.logs');
         Route::get('/configuracoes', [SettingController::class, 'edit'])->name('settings.edit');

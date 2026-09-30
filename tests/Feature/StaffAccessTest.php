@@ -79,6 +79,27 @@ class StaffAccessTest extends TestCase
         $this->assertTrue(AuditLog::where('entity', 'meeting')->where('action', 'created')->exists());
     }
 
+    public function test_coordinator_can_reschedule_and_cancel_but_teacher_cannot(): void
+    {
+        [$a, $b] = $this->makeClasses();
+        $meeting = $this->makeMeeting([$a->id, $b->id]);
+        $appointment = app(AppointmentService::class)->book('pai@x.com', 'Pai', 'Filho', $this->slot($meeting, $a, '08:00')->id);
+
+        $this->actingAs($this->makeUser('teacher', 'prof'));
+        $this->get(route('staff.appointments.edit', $appointment))->assertForbidden();
+        $this->post(route('staff.appointments.cancel', $appointment))->assertForbidden();
+
+        $this->actingAs($this->makeUser('coordinator', 'coord'));
+        $this->get(route('staff.appointments.index'))->assertSee('Alterar')->assertSee('Cancelar');
+        $this->get(route('staff.appointments.edit', $appointment))->assertOk();
+        $this->put(route('staff.appointments.update', $appointment), ['slot_id' => $this->slot($meeting, $b, '09:00')->id])
+            ->assertRedirect(route('staff.appointments.index'));
+        $this->assertSame('booked', $this->slot($meeting, $b, '09:00')->status);
+
+        $this->post(route('staff.appointments.cancel', $appointment));
+        $this->assertSame('cancelled', $appointment->fresh()->status);
+    }
+
     public function test_coordinator_sees_all_appointments_but_cannot_administer(): void
     {
         [$a, $b] = $this->makeClasses();
